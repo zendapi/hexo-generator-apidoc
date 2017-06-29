@@ -8,7 +8,7 @@
  */
 let DsBuilder = require("./lib/ds_builder");
 let Models = require("./lib/models");
-
+let Promise = require("bluebird");
 hexo.apigen = {};
 
 function register_models(hexo)
@@ -22,12 +22,15 @@ function register_models(hexo)
    }
 }
 
-hexo.on('generateBefore', function(){
+hexo.extend.filter.register("before_generate", function(){
    register_models(hexo);
-   DsBuilder(hexo);
-});
+   return DsBuilder(hexo);
+}, 1);
 
 hexo.extend.generator.register('clscontent', function(locals) {
+   let db = hexo.database;
+   console.log(db.model("ClassModel").count());
+   console.log(db.model("StructModel").count());
    return {
       path: "/api",
       layout: ["apidoc/index"],
