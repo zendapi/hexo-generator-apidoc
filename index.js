@@ -18,7 +18,7 @@ function register_models(hexo)
    let key = '';
    for (let i = 0, len = keys.length; i < len; i++) {
       key = keys[i];
-      db.model(key, Models[key](hexo));
+      db.model("ClassModel", Models[key](hexo));
    }
 }
 
