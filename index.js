@@ -27,13 +27,42 @@ hexo.extend.filter.register("before_generate", function(){
    return DsBuilder(hexo);
 }, 1);
 
-hexo.extend.generator.register('clscontent', function(locals) {
+hexo.extend.generator.register('apidocindex', function(locals) {
    let db = hexo.database;
-   console.log(db.model("ClassModel").count());
-   console.log(db.model("StructModel").count());
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
    return {
-      path: "/api",
-      layout: ["apidoc/index"],
-      data: {'xiux':1}
+      path: basePath+"/",
+      layout: ["apidoc/index"]
+   };
+});
+
+hexo.extend.generator.register('apidocclasses', function(locals) {
+   let db = hexo.database;
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   return {
+      path: basePath+"/classes.html",
+      layout: ["apidoc/classes"]
+   };
+});
+
+hexo.extend.generator.register('apidocnamespaces', function(locals) {
+   let db = hexo.database;
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   return {
+      path: basePath+"/namespaces.html",
+      layout: ["apidoc/namespaces"]
+   };
+});
+
+hexo.extend.generator.register('apidocmodules', function(locals) {
+   let db = hexo.database;
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   return {
+      path: basePath+"/modules.html",
+      layout: ["apidoc/modules"]
    };
 });
