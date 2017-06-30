@@ -9,6 +9,7 @@
 let DsBuilder = require("./lib/ds_builder");
 let Models = require("./lib/models");
 let Promise = require("bluebird");
+require("./lib/helper")(hexo);
 
 hexo.apigen = {};
 
@@ -30,12 +31,16 @@ hexo.extend.filter.register("before_generate", function(){
 
 hexo.extend.generator.register('apidocindex', function(locals) {
    let db = hexo.database;
-   let fileModel = db.model("FileModel");
    let config = hexo.config;
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/",
-      layout: ["api/index"]
+      layout: ["api/index"],
+      data : {
+         namespaces: db.model("NamespaceModel"),
+         modules: db.model("ModuleModel"),
+         layout: "apiindex"
+      }
    };
 });
 
