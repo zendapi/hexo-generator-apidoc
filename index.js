@@ -9,6 +9,7 @@
 let DsBuilder = require("./lib/ds_builder");
 let Models = require("./lib/models");
 let Promise = require("bluebird");
+
 hexo.apigen = {};
 
 function register_models(hexo)
@@ -18,7 +19,7 @@ function register_models(hexo)
    let key = '';
    for (let i = 0, len = keys.length; i < len; i++) {
       key = keys[i];
-      db.model("ClassModel", Models[key](hexo));
+      db.model(key, Models[key](hexo));
    }
 }
 
@@ -29,11 +30,12 @@ hexo.extend.filter.register("before_generate", function(){
 
 hexo.extend.generator.register('apidocindex', function(locals) {
    let db = hexo.database;
+   let fileModel = db.model("FileModel");
    let config = hexo.config;
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/",
-      layout: ["apidoc/index"]
+      layout: ["api/index"]
    };
 });
 
@@ -43,7 +45,7 @@ hexo.extend.generator.register('apidocclasses', function(locals) {
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/classes.html",
-      layout: ["apidoc/classes"]
+      layout: ["api/classes"]
    };
 });
 
@@ -53,7 +55,7 @@ hexo.extend.generator.register('apidocnamespaces', function(locals) {
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/namespaces.html",
-      layout: ["apidoc/namespaces"]
+      layout: ["api/namespaces"]
    };
 });
 
@@ -63,6 +65,6 @@ hexo.extend.generator.register('apidocmodules', function(locals) {
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/modules.html",
-      layout: ["apidoc/modules"]
+      layout: ["api/modules"]
    };
 });
