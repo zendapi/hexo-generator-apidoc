@@ -33,8 +33,8 @@ hexo.extend.generator.register('apidocindex', function(locals) {
    let db = hexo.database;
    let config = hexo.config;
    let basePath = config.apidoc_path;
-   console.log("----------------");
-    console.log(hexo.model("ModuleModel").toArray())
+   // console.log("----------------");
+   //   console.log(hexo.model("ModuleModel").toArray())
    return {
       path: basePath+"/",
       layout: ["api/index"],
