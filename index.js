@@ -31,31 +31,40 @@ hexo.extend.generator.register('apidocindex', function(locals) {
 });
 
 hexo.extend.generator.register('apidocclasses', function(locals) {
-   let db = hexo.database;
    let config = hexo.config;
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/classes.html",
-      layout: ["api/classes"]
+      layout: ["api/classes"],
+      data: {
+         layout: "apiclasses",
+         classes
+      }
    };
 });
 
 hexo.extend.generator.register('apidocnamespaces', function(locals) {
-   let db = hexo.database;
    let config = hexo.config;
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/namespaces.html",
-      layout: ["api/namespaces"]
+      layout: ["api/namespaces"],
+      data: {
+         layout: "apinamespaces",
+         namespaces: hexo.doxygen.namespaces
+      }
    };
 });
 
 hexo.extend.generator.register('apidocmodules', function(locals) {
-   let db = hexo.database;
    let config = hexo.config;
    let basePath = config.apidoc_path;
    return {
       path: basePath+"/modules.html",
-      layout: ["api/modules"]
+      layout: ["api/modules"],
+      data: {
+         layout: "apimodules",
+         modules: hexo.doxygen.modules
+      }
    };
 });
