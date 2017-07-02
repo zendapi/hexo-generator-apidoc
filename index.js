@@ -7,40 +7,24 @@
  * @license   http://www.topjs.org/license/new-bsd New BSD License
  */
 let DsBuilder = require("./lib/ds_builder");
-let Models = require("./lib/models");
 let Promise = require("bluebird");
 require("./lib/helper")(hexo);
 
 hexo.apigen = {};
 
-function register_models(hexo)
-{
-   let db = hexo.database;
-   let keys = Object.keys(Models);
-   let key = '';
-   for (let i = 0, len = keys.length; i < len; i++) {
-      key = keys[i];
-      db.model(key, Models[key](hexo));
-   }
-}
-
 hexo.extend.filter.register("before_generate", function(){
-   register_models(hexo);
    return DsBuilder(hexo);
 }, 1);
 
 hexo.extend.generator.register('apidocindex', function(locals) {
-   let db = hexo.database;
    let config = hexo.config;
    let basePath = config.apidoc_path;
-   // console.log("----------------");
-   //   console.log(hexo.model("ModuleModel").toArray())
    return {
       path: basePath+"/",
       layout: ["api/index"],
       data : {
-         namespaces: db.model("NamespaceModel"),
-         modules: db.model("ModuleModel"),
+         namespaces: hexo.doxygen.namespaces,
+         modules: hexo.doxygen.modules,
          layout: "apiindex"
       }
    };
