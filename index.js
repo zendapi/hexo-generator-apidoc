@@ -30,19 +30,6 @@ hexo.extend.generator.register('apidocindex', function(locals) {
    };
 });
 
-hexo.extend.generator.register('apidocclasses', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   return {
-      path: basePath+"/classes.html",
-      layout: ["api/classes"],
-      data: {
-         layout: "apiclasses",
-         classes
-      }
-   };
-});
-
 hexo.extend.generator.register('apidocnamespaces', function(locals) {
    let config = hexo.config;
    let basePath = config.apidoc_path;
@@ -65,6 +52,18 @@ hexo.extend.generator.register('apidocmodules', function(locals) {
       data: {
          layout: "apimodules",
          modules: hexo.doxygen.modules
+      }
+   };
+});
+
+hexo.extend.generator.register('apiglobals', function(locals) {
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   return {
+      path: basePath+"/globals.html",
+      layout: ["api/globals"],
+      data: {
+         layout: "apiglobals"
       }
    };
 });
