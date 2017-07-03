@@ -63,7 +63,8 @@ hexo.extend.generator.register('apiglobals', function(locals) {
       path: basePath+"/globals.html",
       layout: ["api/globals"],
       data: {
-         layout: "apiglobals"
+         layout: "apiglobals",
+         globals: hexo.doxygen.files
       }
    };
 });
