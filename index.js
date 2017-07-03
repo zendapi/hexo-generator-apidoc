@@ -19,6 +19,7 @@ hexo.extend.filter.register("before_generate", function(){
 hexo.extend.generator.register('apidocindex', function(locals) {
    let config = hexo.config;
    let basePath = config.apidoc_path;
+   console.log(hexo.doxygen.classes)
    return {
       path: basePath+"/",
       layout: ["api/index"],
