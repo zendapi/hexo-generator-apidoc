@@ -104,3 +104,16 @@ hexo.extend.generator.register('apiglobals', function(locals) {
       }
    };
 });
+
+hexo.extend.generator.register('apifiles', function(locals) {
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   return {
+      path: basePath+"/files.html",
+      layout: ["api/files"],
+      data: {
+         layout: "apifiles",
+         files: hexo.doxygen.files
+      }
+   };
+});
