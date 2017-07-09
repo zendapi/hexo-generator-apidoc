@@ -55,8 +55,8 @@ hexo.extend.generator.register('apidocnamespacecontent', function(locals) {
          layout: ["api/namespace_content"],
          data: {
             layout: "apinamespacecontent",
-            module: namespace,
-            modules: namespaces
+            namespace: namespace,
+            namespaces: namespaces
          }
       };
    });
