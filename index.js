@@ -79,6 +79,23 @@ hexo.extend.generator.register('apidocmodulecontent', function(locals) {
    });
 });
 
+hexo.extend.generator.register('apidocclasscontent', function(locals) {
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   let classes = hexo.doxygen.classes;
+   return _.values(classes).map(function(cls){
+      return {
+         path: basePath+"/"+cls.refid+".html",
+         layout: ["api/class_content"],
+         data: {
+            layout: "apiclasscontent",
+            cls: cls,
+            classes: hexo.doxygen.classes
+         }
+      };
+   });
+});
+
 hexo.extend.generator.register('apidocfilecontent', function(locals) {
    let config = hexo.config;
    let basePath = config.apidoc_path;
