@@ -79,6 +79,24 @@ hexo.extend.generator.register('apidocmodulecontent', function(locals) {
    });
 });
 
+hexo.extend.generator.register('apidocfilecontent', function(locals) {
+   let config = hexo.config;
+   let basePath = config.apidoc_path;
+   let files = hexo.doxygen.files;
+   return _.values(files).map(function(file){
+      return {
+         path: basePath+"/"+file.refid+".html",
+         layout: ["api/file_content"],
+         data: {
+            layout: "apifilecontent",
+            file: file,
+            files: files
+         }
+      };
+   });
+});
+
+
 hexo.extend.generator.register('apidocmodules', function(locals) {
    let config = hexo.config;
    let basePath = config.apidoc_path;
