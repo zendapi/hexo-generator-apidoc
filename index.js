@@ -90,7 +90,8 @@ hexo.extend.generator.register('apidocclasscontent', function(locals) {
          data: {
             layout: "apiclasscontent",
             cls: cls,
-            classes: hexo.doxygen.classes
+            classes: hexo.doxygen.classes,
+            files: hexo.doxygen.files
          }
       };
    });
