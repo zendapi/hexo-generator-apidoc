@@ -103,7 +103,7 @@ hexo.extend.generator.register('apidocfilecontent', function(locals) {
    let files = hexo.doxygen.files;
    return _.values(files).map(function(file){
       return {
-         path: basePath+"/"+file.refid+".html",
+         path: basePath+"/file"+file.refid+".html",
          layout: ["api/file_content"],
          data: {
             layout: "apifilecontent",
