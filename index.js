@@ -11,145 +11,148 @@ let Promise = require("bluebird");
 require("./lib/helper")(hexo);
 let _ = require('lodash');
 let Utils = require("./lib/utils");
-
+let generateApiDocs = !!hexo.env.args.withApidoc;
 hexo.apigen = {};
 
-hexo.extend.filter.register("before_generate", function(){
-   return DsBuilder(hexo);
-}, 1);
+if (generateApiDocs) {
 
-hexo.extend.generator.register('apidocindex', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   return {
-      path: basePath+"/",
-      layout: ["api/index"],
-      data : {
-         namespaces: hexo.doxygen.namespaces,
-         modules: hexo.doxygen.modules,
-         layout: "apiindex"
-      }
-   };
-});
+   hexo.extend.filter.register("before_generate", function(){
+      return DsBuilder(hexo);
+   }, 1);
 
-hexo.extend.generator.register('apidocnamespaces', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   return {
-      path: basePath+"/namespaces.html",
-      layout: ["api/namespaces"],
-      data: {
-         layout: "apinamespaces",
-         namespaces: hexo.doxygen.namespaces
-      }
-   };
-});
-
-hexo.extend.generator.register('apidocnamespacecontent', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   let namespaces = hexo.doxygen.namespaces;
-   return _.values(namespaces).map(function(namespace){
+   hexo.extend.generator.register('apidocindex', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
       return {
-         path: basePath+"/"+namespace.refid+".html",
-         layout: ["api/namespace_content"],
-         data: {
-            layout: "apinamespacecontent",
-            namespace: namespace,
-            namespaces: namespaces
+         path: basePath+"/",
+         layout: ["api/index"],
+         data : {
+            namespaces: hexo.doxygen.namespaces,
+            modules: hexo.doxygen.modules,
+            layout: "apiindex"
          }
       };
    });
-});
 
-hexo.extend.generator.register('apidocmodulecontent', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   let modules = Utils.generate_flat_module_list(_.values(hexo.doxygen.modules), 0, null, "");
-   return modules.map(function(module){
+   hexo.extend.generator.register('apidocnamespaces', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
       return {
-         path: basePath+"/"+module.refid+".html",
-         layout: ["api/module_content"],
+         path: basePath+"/namespaces.html",
+         layout: ["api/namespaces"],
          data: {
-            layout: "apimodulecontent",
-            module: module,
+            layout: "apinamespaces",
+            namespaces: hexo.doxygen.namespaces
+         }
+      };
+   });
+
+   hexo.extend.generator.register('apidocnamespacecontent', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
+      let namespaces = hexo.doxygen.namespaces;
+      return _.values(namespaces).map(function(namespace){
+         return {
+            path: basePath+"/"+namespace.refid+".html",
+            layout: ["api/namespace_content"],
+            data: {
+               layout: "apinamespacecontent",
+               namespace: namespace,
+               namespaces: namespaces
+            }
+         };
+      });
+   });
+
+   hexo.extend.generator.register('apidocmodulecontent', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
+      let modules = Utils.generate_flat_module_list(_.values(hexo.doxygen.modules), 0, null, "");
+      return modules.map(function(module){
+         return {
+            path: basePath+"/"+module.refid+".html",
+            layout: ["api/module_content"],
+            data: {
+               layout: "apimodulecontent",
+               module: module,
+               modules: hexo.doxygen.modules
+            }
+         };
+      });
+   });
+
+   hexo.extend.generator.register('apidocclasscontent', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
+      let classes = hexo.doxygen.classes;
+      return _.values(classes).map(function(cls){
+         return {
+            path: basePath+"/"+cls.refid+".html",
+            layout: ["api/class_content"],
+            data: {
+               layout: "apiclasscontent",
+               cls: cls,
+               classes: hexo.doxygen.classes,
+               files: hexo.doxygen.files
+            }
+         };
+      });
+   });
+
+   hexo.extend.generator.register('apidocfilecontent', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
+      let files = hexo.doxygen.files;
+      return _.values(files).map(function(file){
+         return {
+            path: basePath+"/file"+file.refid+".html",
+            layout: ["api/file_content"],
+            data: {
+               layout: "apifilecontent",
+               file: file,
+               files: files
+            }
+         };
+      });
+   });
+
+
+   hexo.extend.generator.register('apidocmodules', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
+      return {
+         path: basePath+"/modules.html",
+         layout: ["api/modules"],
+         data: {
+            layout: "apimodules",
             modules: hexo.doxygen.modules
          }
       };
    });
-});
 
-hexo.extend.generator.register('apidocclasscontent', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   let classes = hexo.doxygen.classes;
-   return _.values(classes).map(function(cls){
+   hexo.extend.generator.register('apiglobals', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
       return {
-         path: basePath+"/"+cls.refid+".html",
-         layout: ["api/class_content"],
+         path: basePath+"/globals.html",
+         layout: ["api/globals"],
          data: {
-            layout: "apiclasscontent",
-            cls: cls,
-            classes: hexo.doxygen.classes,
+            layout: "apiglobals",
+            globals: hexo.doxygen.files
+         }
+      };
+   });
+
+   hexo.extend.generator.register('apifiles', function(locals) {
+      let config = hexo.config;
+      let basePath = config.apidoc_path;
+      return {
+         path: basePath+"/files.html",
+         layout: ["api/files"],
+         data: {
+            layout: "apifiles",
             files: hexo.doxygen.files
          }
       };
    });
-});
-
-hexo.extend.generator.register('apidocfilecontent', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   let files = hexo.doxygen.files;
-   return _.values(files).map(function(file){
-      return {
-         path: basePath+"/file"+file.refid+".html",
-         layout: ["api/file_content"],
-         data: {
-            layout: "apifilecontent",
-            file: file,
-            files: files
-         }
-      };
-   });
-});
-
-
-hexo.extend.generator.register('apidocmodules', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   return {
-      path: basePath+"/modules.html",
-      layout: ["api/modules"],
-      data: {
-         layout: "apimodules",
-         modules: hexo.doxygen.modules
-      }
-   };
-});
-
-hexo.extend.generator.register('apiglobals', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   return {
-      path: basePath+"/globals.html",
-      layout: ["api/globals"],
-      data: {
-         layout: "apiglobals",
-         globals: hexo.doxygen.files
-      }
-   };
-});
-
-hexo.extend.generator.register('apifiles', function(locals) {
-   let config = hexo.config;
-   let basePath = config.apidoc_path;
-   return {
-      path: basePath+"/files.html",
-      layout: ["api/files"],
-      data: {
-         layout: "apifiles",
-         files: hexo.doxygen.files
-      }
-   };
-});
+}
